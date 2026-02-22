@@ -8,7 +8,7 @@
 
 <div align="center">
   <h2>🤖 Discord Bot with Moderation & Social Media Monitoring</h2>
-  <p>A Discord bot designed for server management, moderation, and real-time notifications from YouTube and TikTok.</p>
+  <p>Simple Discord bot designed for server management, moderation, and real-time notifications from YouTube and TikTok.</p>
 </div>
 
 ---
