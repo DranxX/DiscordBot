@@ -50,8 +50,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/bramadya-bot.git
-   cd bramadya-bot
+   git clone https://github.com/DranxX/DiscordBot.git
+   cd DiscrodBot
    ```
 
 2. **Install dependencies**
@@ -157,7 +157,7 @@ npm run dev  # If you add a dev script
 Use PM2 or similar process manager:
 ```bash
 npm install -g pm2
-pm2 start index.js --name "bramadya-bot"
+pm2 start index.js --name "DiscrodBot"
 ```
 
 ---
@@ -184,26 +184,7 @@ Set `NODE_ENV=development` for verbose logging.
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-  <p>Made with ❤️ for the Discord community</p>
-  <p>
-    <a href="#features">Features</a> •
-    <a href="#installation">Installation</a> •
-    <a href="#usage">Usage</a> •
-    <a href="#contributing">Contributing</a>
-  </p>
-</div>
-
----
-
 <div align="center">
   <img src="https://forthebadge.com/images/badges/built-with-love.svg" alt="Built with Love"/>
   <img src="https://forthebadge.com/images/badges/made-with-javascript.svg" alt="Made with JavaScript"/>
 </div></content>
-<parameter name="filePath">c:\Users\nexof\Documents\Bramadya\Exp\Bot\README.md
