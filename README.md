@@ -1,4 +1,4 @@
-# 🚀 Bramadya Bot
+# 🚀 Discord Bot
 
 <div align="center">
   <img src="https://img.shields.io/badge/Discord.js-14.0.0-blue?style=for-the-badge&logo=discord" alt="Discord.js"/>
@@ -7,8 +7,8 @@
 </div>
 
 <div align="center">
-  <h2>🤖 Advanced Discord Bot with Moderation & Social Media Monitoring</h2>
-  <p>A futuristic Discord bot designed for server management, moderation, and real-time notifications from YouTube and TikTok.</p>
+  <h2>🤖 Discord Bot with Moderation & Social Media Monitoring</h2>
+  <p>A Discord bot designed for server management, moderation, and real-time notifications from YouTube and TikTok.</p>
 </div>
 
 ---
