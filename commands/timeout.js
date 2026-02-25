@@ -1,25 +1,24 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { PermissionsBitField } = require("discord.js");
+const { SlashCommandBuilder, PermissionsBitField } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("timeout")
         .setDescription("Timeout seorang user")
         .addUserOption(option =>
             option.setName("target")
-                  .setDescription("User yang akan di-timeout")
-                  .setRequired(true)
+                .setDescription("User yang akan di-timeout")
+                .setRequired(true)
         )
         .addIntegerOption(option =>
             option.setName("durasi")
-                  .setDescription("Durasi timeout dalam menit (1-40320)")
-                  .setRequired(true)
-                  .setMinValue(1)
-                  .setMaxValue(40320)
+                .setDescription("Durasi timeout dalam menit (1-40320)")
+                .setRequired(true)
+                .setMinValue(1)
+                .setMaxValue(40320)
         )
         .addStringOption(option =>
             option.setName("alasan")
-                  .setDescription("Alasan timeout (opsional)")
-                  .setRequired(false)
+                .setDescription("Alasan timeout (opsional)")
+                .setRequired(false)
         )
         .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers)
         .setDMPermission(false),

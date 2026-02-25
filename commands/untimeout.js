@@ -1,13 +1,12 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { PermissionsBitField } = require("discord.js");
+const { SlashCommandBuilder, PermissionsBitField } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("untimeout")
         .setDescription("Hapus timeout seorang user")
         .addUserOption(option =>
             option.setName("target")
-                  .setDescription("User yang timeout-nya akan dihapus")
-                  .setRequired(true)
+                .setDescription("User yang timeout-nya akan dihapus")
+                .setRequired(true)
         )
         .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers)
         .setDMPermission(false),
