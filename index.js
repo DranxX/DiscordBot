@@ -29,10 +29,14 @@ for (const file of commandFiles) {
 const rest = new REST({ version: "10" }).setToken(token);
 
 (async () => {
-    await rest.put(
-        Routes.applicationGuildCommands(clientId, guildId),
-        { body: commands }
-    );
+    try {
+        await rest.put(
+            Routes.applicationGuildCommands(clientId, guildId),
+            { body: commands }
+        );
+    } catch (error) {
+        console.error('[REST Error]', error);
+    }
 })();
 
 const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
@@ -45,35 +49,39 @@ for (const file of eventFiles) {
     }
 }
 
-const updatePresence = (guild) => {
+client.updatePresence = (guild) => {
     const totalMembers = guild.memberCount;
     const onlineMembers = guild.members.cache.filter(m => m.presence?.status === "online" || m.presence?.status === "dnd" || m.presence?.status === "idle").size;
 
     client.user.setPresence({
-        activities: [{ name: `『 ${onlineMembers}/${totalMembers} 』Members Online`, type: ActivityType.Watching }],
+        activities: [{ name: `Monitoring`, type: ActivityType.Watching, state: `『 ${onlineMembers}/${totalMembers} 』Members Online` }],
         status: "online"
     });
 };
 
-client.once("clientReady", async () => {
-    const guild = await client.guilds.fetch(guildId);
-    await guild.members.fetch();
-    updatePresence(guild);
+let presenceUpdateTimeout = null;
+
+client.on("presenceUpdate", () => {
+    if (presenceUpdateTimeout) return;
+    presenceUpdateTimeout = setTimeout(() => {
+        const guild = client.guilds.cache.get(guildId);
+        if (guild) client.updatePresence(guild);
+        presenceUpdateTimeout = null;
+    }, 10000);
 });
 
-client.on("presenceUpdate", async (oldPresence, newPresence) => {
-    const guild = await client.guilds.fetch(guildId);
-    updatePresence(guild);
+client.on("guildMemberAdd", () => {
+    const guild = client.guilds.cache.get(guildId);
+    if (guild) client.updatePresence(guild);
 });
 
-client.on("guildMemberAdd", async (member) => {
-    const guild = await client.guilds.fetch(guildId);
-    updatePresence(guild);
+client.on("guildMemberRemove", () => {
+    const guild = client.guilds.cache.get(guildId);
+    if (guild) client.updatePresence(guild);
 });
 
-client.on("guildMemberRemove", async (member) => {
-    const guild = await client.guilds.fetch(guildId);
-    updatePresence(guild);
+client.on("error", (error) => {
+    console.error('[Client Error]', error.message);
 });
 
 client.login(token);
