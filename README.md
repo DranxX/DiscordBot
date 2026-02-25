@@ -1,7 +1,7 @@
 # 🚀 Discord Bot
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Discord.js-14.0.0-blue?style=for-the-badge&logo=discord" alt="Discord.js"/>
+  <img src="https://img.shields.io/badge/Discord.js-14.16.3-blue?style=for-the-badge&logo=discord" alt="Discord.js"/>
   <img src="https://img.shields.io/badge/Node.js-16+-green?style=for-the-badge&logo=node.js" alt="Node.js"/>
   <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" alt="Status"/>
 </div>
@@ -16,26 +16,26 @@
 ## ✨ Features
 
 ### 🎯 Core Commands
-- [x] **/ping** - Check bot latency and responsiveness
-- [x] **/info** - Display server information in an embed
-- [x] **/clear** - Bulk delete messages (1-100)
+- [x] **/ping** - Check bot latency, API response, and system info (CPU, RAM, Uptime)
+- [x] **/info** - Display server information in a rich embed
+- [x] **/clear** - Bulk delete messages (up to 1000 messages)
 
 ### 🛡️ Moderation Tools
 - [x] **/ban** - Ban users with optional reason
 - [x] **/kick** - Kick users with optional reason
-- [x] **/timeout** - Timeout users for specified duration
+- [x] **/timeout** - Timeout users for specified duration (up to 28 days)
 - [x] **/untimeout** - Remove timeout from users
-- [x] **/unban** - Unban users with optional reason
 
 ### 📺 Social Media Monitoring
-- [x] **YouTube Notifier** - Real-time notifications for new videos
-- [x] **TikTok Notifier** - Real-time notifications for new posts
+- [x] **YouTube Notifier** - Real-time notifications for new videos via RSS (No API Key required)
+- [x] **TikTok Notifier** - Real-time notifications for new posts (Scraping-based)
+- [x] **TikTok Live Notifier** - Instant notifications when a user goes LIVE on TikTok
 
 ### 🔧 Advanced Features
-- [x] **Role-based Permissions** - Secure access control
-- [x] **Ephemeral Responses** - Private command feedback
-- [x] **Error Handling** - Robust error management
-- [x] **Auto-deployment** - Automatic slash command registration
+- [x] **Real-time Presence** - Displays online members count in bot status
+- [x] **Role-based Permissions** - Secure access control for moderator commands
+- [x] **Ephemeral Responses** - Private command feedback for moderation actions
+- [x] **Auto-deployment** - Automatic slash command registration on startup
 
 ---
 
@@ -44,14 +44,14 @@
 ### Prerequisites
 - Node.js 16.0.0 or higher
 - A Discord Bot Token
-- YouTube Data API v3 Key (for YouTube notifications)
+- Appropriate permissions for the bot in your server
 
 ### Setup Steps
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/DranxX/DiscordBot.git
-   cd DiscrodBot
+   cd DiscordBot
    ```
 
 2. **Install dependencies**
@@ -60,13 +60,12 @@
    ```
 
 3. **Configure environment variables**
-   - Copy `.env.example` to `.env`
+   - Create a `.env` file in the root directory
    - Fill in your credentials:
      ```env
      TOKEN=your_discord_bot_token
      CLIENT_ID=your_application_id
      GUILD_ID=your_server_id
-     YOUTUBE_API_KEY=your_youtube_api_key
      NOTIFICATION_CHANNEL_ID=your_channel_id
      MODERATOR_ROLE_ID=your_moderator_role_id
      ```
@@ -95,37 +94,16 @@
 | `TOKEN` | Discord bot token | ✅ |
 | `CLIENT_ID` | Discord application ID | ✅ |
 | `GUILD_ID` | Server ID for command registration | ✅ |
-| `YOUTUBE_API_KEY` | YouTube Data API v3 key | For YouTube notifications |
-| `NOTIFICATION_CHANNEL_ID` | Channel ID for notifications | For notifications |
-| `MODERATOR_ROLE_ID` | Role ID for moderator permissions | ✅ |
+| `NOTIFICATION_CHANNEL_ID` | Channel ID for social media notifications | ✅ |
+| `MODERATOR_ROLE_ID` | Role ID allowed to use moderator commands | ✅ |
 
 ### Config File (config.json)
 ```json
 {
   "youtubeChannelId": "Channel ID for YouTube monitoring",
-  "tiktokUsername": "TikTok username for monitoring"
+  "tiktokUsername": "TikTok username (including @) for monitoring"
 }
 ```
-
----
-
-## 📖 Usage
-
-### Moderation Commands
-All moderation commands require the specified moderator role and appropriate bot permissions.
-
-#### Ban a User
-```
-/ban target:@user alasan:Reason for ban
-```
-
-#### Timeout a User
-```
-/timeout target:@user durasi:60 alasan:Spamming
-```
-
-### Social Media Monitoring
-The bot automatically checks for new content every 5 minutes and sends notifications to the configured channel.
 
 ---
 
@@ -139,38 +117,19 @@ The bot automatically checks for new content every 5 minutes and sends notificat
 - Moderate Members
 - Manage Messages
 - View Channels
-
-### User Permissions
-- Commands use role-based access control
-- Moderation commands require the configured moderator role
+- Guild Presences (Intents)
+- Guild Members (Intents)
 
 ---
 
 ## 🚀 Deployment
 
-### Local Development
-```bash
-npm run dev  # If you add a dev script
-```
-
 ### Production
-Use PM2 or similar process manager:
+Use PM2 or similar process manager for 24/7 uptime:
 ```bash
 npm install -g pm2
-pm2 start index.js --name "DiscrodBot"
+pm2 start index.js --name "DiscordBot"
 ```
-
----
-
-## 🐛 Troubleshooting
-
-### Common Issues
-- **Commands not registering**: Check GUILD_ID and ensure bot has application.commands scope
-- **YouTube API errors**: Verify API key and quota limits
-- **TikTok scraping fails**: TikTok may have changed their structure; consider alternatives
-
-### Debug Mode
-Set `NODE_ENV=development` for verbose logging.
 
 ---
 
@@ -187,4 +146,4 @@ Set `NODE_ENV=development` for verbose logging.
 <div align="center">
   <img src="https://forthebadge.com/images/badges/built-with-love.svg" alt="Built with Love"/>
   <img src="https://forthebadge.com/images/badges/made-with-javascript.svg" alt="Made with JavaScript"/>
-</div></content>
+</div>
