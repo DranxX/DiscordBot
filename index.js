@@ -34,9 +34,7 @@ const rest = new REST({ version: "10" }).setToken(token);
             Routes.applicationGuildCommands(clientId, guildId),
             { body: commands }
         );
-    } catch (error) {
-        console.error('[REST Error]', error);
-    }
+    } catch (error) { }
 })();
 
 const eventFiles = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
@@ -80,8 +78,6 @@ client.on("guildMemberRemove", () => {
     if (guild) client.updatePresence(guild);
 });
 
-client.on("error", (error) => {
-    console.error('[Client Error]', error.message);
-});
+client.on("error", () => { });
 
 client.login(token);

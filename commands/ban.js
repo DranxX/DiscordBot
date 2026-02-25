@@ -1,22 +1,22 @@
-const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder, MessageFlags } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("ban")
         .setDescription("Ban seorang user dari server")
         .addUserOption(option =>
             option.setName("target")
-                  .setDescription("User yang akan di-ban")
-                  .setRequired(true)
+                .setDescription("User yang akan di-ban")
+                .setRequired(true)
         )
         .addStringOption(option =>
             option.setName("alasan")
-                  .setDescription("Alasan ban (opsional)")
-                  .setRequired(false)
+                .setDescription("Alasan ban (opsional)")
+                .setRequired(false)
         )
         .setDefaultMemberPermissions(PermissionsBitField.Flags.BanMembers)
         .setDMPermission(false),
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         if (!interaction.member.roles.cache.has(process.env.MODERATOR_ROLE_ID)) {
             return interaction.editReply({ content: "❌ Kamu tidak punya izin pakai command ini" });
@@ -44,7 +44,6 @@ module.exports = {
             await interaction.guild.members.ban(target, { reason });
             await interaction.editReply({ content: `✅ Berhasil ban ${target.tag} dengan alasan: ${reason}` });
         } catch (error) {
-            console.error(error);
             await interaction.editReply({ content: "❌ Gagal ban user" });
         }
     }

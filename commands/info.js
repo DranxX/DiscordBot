@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField, MessageFlags } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("info")
@@ -7,7 +7,7 @@ module.exports = {
         .setDMPermission(false),
     async execute(interaction) {
         if (!interaction.member.roles.cache.has(process.env.MODERATOR_ROLE_ID)) {
-            return interaction.reply({ content: "❌ Kamu tidak punya izin pakai command ini", ephemeral: true });
+            return interaction.reply({ content: "❌ Kamu tidak punya izin pakai command ini", flags: MessageFlags.Ephemeral });
         }
 
         await interaction.deferReply();
@@ -27,6 +27,6 @@ module.exports = {
             .setFooter({ text: "Footer text", iconURL: "https://i.imgur.com/AfFp7pu.png" })
             .setTimestamp();
 
-        await interaction.editReply({ embeds: [embed], ephemeral: false });
+        await interaction.editReply({ embeds: [embed] });
     }
 }

@@ -15,14 +15,14 @@ function loadState() {
         if (fs.existsSync(STATE_FILE)) {
             return JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8'));
         }
-    } catch (e) {}
+    } catch (e) { }
     return {};
 }
 
 function saveState(state) {
     try {
         fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf-8');
-    } catch (e) {}
+    } catch (e) { }
 }
 
 let state = loadState();
@@ -51,12 +51,9 @@ async function checkYouTube(client) {
     const notificationChannelId = process.env.NOTIFICATION_CHANNEL_ID;
 
     if (lastKnownChannelId && lastKnownChannelId !== config.youtubeChannelId) {
-        console.log(`[YouTube API] Channel ID changed, resetting...`);
         uploadsPlaylistId = null;
         lastYouTubeVideoId = null;
     }
-
-    console.log('[YouTube API] Checking for new videos...');
     try {
         if (!uploadsPlaylistId) {
             const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${config.youtubeChannelId}&key=${apiKey}`;
@@ -100,16 +97,14 @@ async function checkYouTube(client) {
             const channel = client.channels.cache.get(notificationChannelId);
             if (channel) await channel.send(`🎥 **${author}** baru upload video!\n**${title}**\n${link}`);
         }
-    } catch (error) {
-        console.error('[YouTube API] Error:', error.message);
-    }
+    } catch (error) { }
 }
 
 async function checkTikTok(client) {
     const notificationChannelId = process.env.NOTIFICATION_CHANNEL_ID;
     const rawUsername = config.tiktokUsername.replace('@', '');
     const username = rawUsername.toLowerCase();
-    console.log(`[TikTok] Checking for new posts for @${rawUsername}...`);
+
     let browser;
     try {
         browser = await puppeteer.launch({
@@ -131,7 +126,6 @@ async function checkTikTok(client) {
         try {
             await page.waitForSelector('a[href*="/video/"]', { timeout: 30000 });
         } catch (e) {
-            console.log('[TikTok] No video links found after waiting.');
             await browser.close();
             return;
         }
@@ -154,7 +148,6 @@ async function checkTikTok(client) {
         });
 
         if (latestData && latestData.href) {
-            console.log(`[TikTok] Latest post: ${latestData.href} | Caption: ${latestData.caption}`);
             const postId = latestData.href.split('/').pop();
 
             if (lastTikTokPostId === null || postId !== lastTikTokPostId) {
@@ -163,17 +156,13 @@ async function checkTikTok(client) {
                 const channel = client.channels.cache.get(notificationChannelId);
                 if (channel) {
                     await channel.send(`🎵 **@${rawUsername}** baru upload TikTok!\n**${latestData.caption}**\n${latestData.href}`);
-                    console.log('[TikTok] Notification sent with caption.');
                 }
             } else {
-                console.log('[TikTok] No new posts.');
             }
         } else {
-            console.log('[TikTok] No video posts found.');
         }
         await browser.close();
     } catch (error) {
-        console.error('[TikTok] Error:', error.message);
         if (browser) await browser.close();
     }
 }
@@ -182,7 +171,6 @@ async function checkYouTubeLive(client) {
     const apiKey = process.env.YOUTUBE_API_KEY;
     if (!apiKey) return;
     const notificationChannelId = process.env.NOTIFICATION_CHANNEL_ID;
-    console.log('[YouTube Live] Checking...');
     try {
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${config.youtubeChannelId}&eventType=live&type=video&key=${apiKey}`;
         const response = await fetchWithRetry(url);
@@ -199,15 +187,12 @@ async function checkYouTubeLive(client) {
                 const channel = client.channels.cache.get(notificationChannelId);
                 if (channel) {
                     await channel.send(`🔴 **${author}** sedang LIVE di YouTube!\n**${title}**\n${link}`);
-                    console.log('[YouTube Live] Notification sent.');
                 }
             }
         } else if (isYouTubeLiveNotified) {
             isYouTubeLiveNotified = false;
         }
-    } catch (error) {
-        console.error('[YouTube Live] Error:', error.message);
-    }
+    } catch (error) { }
 }
 
 async function checkTikTokLive(client) {
@@ -216,13 +201,11 @@ async function checkTikTokLive(client) {
     const notificationChannelId = process.env.NOTIFICATION_CHANNEL_ID;
     const rawUsername = config.tiktokUsername.replace('@', '');
     const username = rawUsername.toLowerCase();
-    console.log(`[TikTok Live] Checking @${rawUsername}...`);
 
     tikTokLiveConnection = new TikTokLiveConnection(`@${username}`);
 
     try {
         await tikTokLiveConnection.connect();
-        console.log(`[TikTok Live] Connected to @${username}.`);
 
         if (!isTikTokLiveNotified) {
             isTikTokLiveNotified = true;
@@ -233,7 +216,6 @@ async function checkTikTokLive(client) {
         }
 
         tikTokLiveConnection.on('streamEnd', () => {
-            console.log(`[TikTok Live] LIVE ended.`);
             isTikTokLiveNotified = false;
             tikTokLiveConnection.disconnect();
             tikTokLiveConnection = null;

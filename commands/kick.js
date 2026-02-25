@@ -1,22 +1,22 @@
-const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder, MessageFlags } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("kick")
         .setDescription("Kick seorang user dari server")
         .addUserOption(option =>
             option.setName("target")
-                  .setDescription("User yang akan di-kick")
-                  .setRequired(true)
+                .setDescription("User yang akan di-kick")
+                .setRequired(true)
         )
         .addStringOption(option =>
             option.setName("alasan")
-                  .setDescription("Alasan kick (opsional)")
-                  .setRequired(false)
+                .setDescription("Alasan kick (opsional)")
+                .setRequired(false)
         )
         .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
         .setDMPermission(false),
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
         if (!interaction.member.roles.cache.has(process.env.MODERATOR_ROLE_ID)) {
             return interaction.editReply({ content: "❌ Kamu tidak punya izin pakai command ini" });
@@ -49,7 +49,6 @@ module.exports = {
             await member.kick(reason);
             await interaction.editReply({ content: `✅ Berhasil kick ${target.tag} dengan alasan: ${reason}` });
         } catch (error) {
-            console.error(error);
             await interaction.editReply({ content: "❌ Gagal kick user" });
         }
     }
