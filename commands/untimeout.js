@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, PermissionsBitField } = require("@discordjs/builders");
-
+const { SlashCommandBuilder } = require("@discordjs/builders");
+const { PermissionsBitField } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("untimeout")

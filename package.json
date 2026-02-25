@@ -10,7 +10,11 @@
     "axios": "^1.13.5",
     "discord.js": "^14.0.0",
     "dotenv": "^16.0.0",
-    "puppeteer": "^24.37.5"
+    "puppeteer": "^24.37.5",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "tiktok-live-connector": "^2.1.1-beta1",
+    "xml2js": "^0.6.2"
   },
   "engines": {
     "node": ">=16.0.0"

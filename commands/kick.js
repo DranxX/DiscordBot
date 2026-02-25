@@ -1,5 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField } = require("@discordjs/builders");
-
+const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("kick")
@@ -17,28 +16,41 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
         .setDMPermission(false),
     async execute(interaction) {
+        await interaction.deferReply({ ephemeral: true });
+
         if (!interaction.member.roles.cache.has(process.env.MODERATOR_ROLE_ID)) {
-            return interaction.reply({ content: "❌ Kamu tidak punya izin pakai command ini", ephemeral: true });
+            return interaction.editReply({ content: "❌ Kamu tidak punya izin pakai command ini" });
         }
 
         const target = interaction.options.getUser("target");
         const reason = interaction.options.getString("alasan") || "Tidak ada alasan";
 
         if (!target) {
-            return interaction.reply({ content: "❌ User tidak ditemukan", ephemeral: true });
+            return interaction.editReply({ content: "❌ User tidak ditemukan" });
         }
 
         if (target.id === interaction.user.id) {
-            return interaction.reply({ content: "❌ Kamu tidak bisa kick diri sendiri", ephemeral: true });
+            return interaction.editReply({ content: "❌ Kamu tidak bisa kick diri sendiri" });
         }
 
         try {
+            const kickEmbed = new EmbedBuilder()
+                .setColor(0xFFA500)
+                .setTitle("👢 Kamu telah di-kick")
+                .addFields(
+                    { name: "Server", value: interaction.guild.name },
+                    { name: "Alasan", value: reason },
+                    { name: "Moderator", value: interaction.user.tag }
+                )
+                .setTimestamp();
+
             const member = await interaction.guild.members.fetch(target.id);
+            await target.send({ embeds: [kickEmbed] }).catch(() => null);
             await member.kick(reason);
-            await interaction.reply({ content: `✅ Berhasil kick ${target.tag} dengan alasan: ${reason}`, ephemeral: true });
+            await interaction.editReply({ content: `✅ Berhasil kick ${target.tag} dengan alasan: ${reason}` });
         } catch (error) {
             console.error(error);
-            await interaction.reply({ content: "❌ Gagal kick user", ephemeral: true });
+            await interaction.editReply({ content: "❌ Gagal kick user" });
         }
     }
 }
