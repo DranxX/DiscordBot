@@ -12,10 +12,21 @@ let lastTikTokPostId = null;
 let isTikTokLiveNotified = false;
 let tikTokLiveConnection = null;
 
+async function fetchWithRetry(url, retries = 3) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            return await axios.get(url);
+        } catch (error) {
+            if (i === retries - 1) throw error;
+            await new Promise(resolve => setTimeout(resolve, 5000 * (i + 1)));
+        }
+    }
+}
+
 async function checkYouTube(client) {
     const notificationChannelId = process.env.NOTIFICATION_CHANNEL_ID;
     try {
-        const response = await axios.get(`https://www.youtube.com/feeds/videos.xml?channel_id=${config.youtubeChannelId}`);
+        const response = await fetchWithRetry(`https://www.youtube.com/feeds/videos.xml?channel_id=${config.youtubeChannelId}`);
         const parsed = await parseStringPromise(response.data);
         const entries = parsed.feed.entry;
 
@@ -48,15 +59,22 @@ async function checkTikTok(client) {
             args: [
                 '--no-sandbox', 
                 '--disable-setuid-sandbox',
-                '--disable-blink-features=AutomationControlled'
+                '--disable-blink-features=AutomationControlled',
+                '--disable-features=IsolateOrigins,site-per-process'
             ] 
         });
         const page = await browser.newPage();
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36');
         await page.setViewport({ width: 1280, height: 800 });
-        await page.goto(`https://www.tiktok.com/@${config.tiktokUsername.replace('@', '')}`, { waitUntil: 'networkidle2', timeout: 30000 });
-        await page.waitForSelector('div[data-e2e="user-post-item"]', { timeout: 20000 });
-        const posts = await page.$$eval('div[data-e2e="user-post-item"] a', anchors => anchors.map(a => a.href));
+        await page.goto(`https://www.tiktok.com/@${config.tiktokUsername.replace('@', '')}`, { waitUntil: 'networkidle0', timeout: 60000 });
+        await page.waitForTimeout(5000);
+        await page.waitForSelector('div[data-e2e="user-post-item"]', { timeout: 30000 });
+        const posts = await page.$$eval('div[data-e2e="user-post-item"]', items => 
+            items.map(item => {
+                const link = item.querySelector('a[href*="/video/"]');
+                return link ? link.href : null;
+            }).filter(Boolean)
+        );
         if (posts.length > 0) {
             const latestPost = posts[0];
             const postId = latestPost.split('/').pop();
