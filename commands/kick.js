@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField, EmbedBuilder, MessageFlags } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("kick")
@@ -13,7 +13,7 @@ module.exports = {
                 .setDescription("Alasan kick (opsional)")
                 .setRequired(false)
         )
-        .setDefaultMemberPermissions(PermissionsBitField.Flags.KickMembers)
+        .setDefaultMemberPermissions(0)
         .setDMPermission(false),
     async execute(interaction) {
         await interaction.deferReply({ flags: MessageFlags.Ephemeral });

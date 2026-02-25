@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField, MessageFlags } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("untimeout")
@@ -8,7 +8,7 @@ module.exports = {
                 .setDescription("User yang timeout-nya akan dihapus")
                 .setRequired(true)
         )
-        .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers)
+        .setDefaultMemberPermissions(0)
         .setDMPermission(false),
     async execute(interaction) {
         if (!interaction.member.roles.cache.has(process.env.MODERATOR_ROLE_ID)) {

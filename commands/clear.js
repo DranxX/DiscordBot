@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionsBitField, MessageFlags } = require("discord.js");
+const { SlashCommandBuilder, MessageFlags } = require("discord.js");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("clear")
@@ -8,7 +8,7 @@ module.exports = {
                 .setDescription("Jumlah pesan (1-100)")
                 .setRequired(true)
         )
-        .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageMessages)
+        .setDefaultMemberPermissions(0)
         .setDMPermission(false),
     async execute(interaction) {
         if (!interaction.member.roles.cache.has(process.env.MODERATOR_ROLE_ID)) {
