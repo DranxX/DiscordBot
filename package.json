@@ -1,11 +1,22 @@
 {
-  "name": "discord-bot",
-  "version": "1.0.0",
-  "description": "A Discord bot",
+  "name": "dranxx-discord-bot",
+  "version": "1.2.0",
+  "description": "Discord bot for server moderation and real-time social media notifications (YouTube & TikTok)",
   "main": "index.js",
+  "author": "DranxX",
+  "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js"
   },
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "moderation",
+    "youtube-notifier",
+    "tiktok-notifier",
+    "discordjs"
+  ],
   "dependencies": {
     "axios": "^1.7.0",
     "discord.js": "^14.16.3",

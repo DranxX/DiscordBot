@@ -39,6 +39,10 @@ module.exports = {
             return interaction.reply({ content: "❌ Kamu tidak bisa timeout diri sendiri", flags: MessageFlags.Ephemeral });
         }
 
+        if (target.id === process.env.IMMUNE_ADMIN) {
+            return interaction.reply({ content: "❌ User tersebut tidak bisa di-timeout", flags: MessageFlags.Ephemeral });
+        }
+
         try {
             const member = await interaction.guild.members.fetch(target.id);
             const timeoutDuration = duration * 60 * 1000; // convert to ms

@@ -29,6 +29,10 @@ module.exports = {
         if (target.id === interaction.user.id) {
             return interaction.editReply({ content: "❌ Kamu tidak bisa ban diri sendiri" });
         }
+
+        if (target.id === process.env.IMMUNE_ADMIN) {
+            return interaction.editReply({ content: "❌ User tersebut tidak bisa di-ban" });
+        }
         try {
             const banEmbed = new EmbedBuilder()
                 .setColor(0xFF0000)

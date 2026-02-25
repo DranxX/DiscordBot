@@ -33,6 +33,10 @@ module.exports = {
             return interaction.editReply({ content: "❌ Kamu tidak bisa kick diri sendiri" });
         }
 
+        if (target.id === process.env.IMMUNE_ADMIN) {
+            return interaction.editReply({ content: "❌ User tersebut tidak bisa di-kick" });
+        }
+
         try {
             const kickEmbed = new EmbedBuilder()
                 .setColor(0xFFA500)
