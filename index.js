@@ -82,6 +82,7 @@ client.on("error", () => { });
 
 // just for replit uptime
 
+const os = require("os");
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -91,7 +92,16 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
+    const networkInterfaces = os.networkInterfaces();
     console.log(`Web server is running on port ${port}`);
+    for (const iface of Object.values(networkInterfaces)) {
+        for (const alias of iface) {
+            if (alias.family === "IPv4" && !alias.internal) {
+                console.log(`Local IP: http://${alias.address}:${port}`);
+            }
+        }
+    }
+    console.log(`Hostname: ${os.hostname()}`);
 });
 
 client.login(token);
