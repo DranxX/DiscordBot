@@ -80,4 +80,18 @@ client.on("guildMemberRemove", () => {
 
 client.on("error", () => { });
 
+// just for replit uptime
+
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get("/", (req, res) => {
+    res.send("Bot is alive!");
+});
+
+app.listen(port, () => {
+    console.log(`Web server is running on port ${port}`);
+});
+
 client.login(token);
